@@ -7,7 +7,6 @@ Web String Finder
 
 Ensure you have [Deno](https://deno.land/) installed on your machine.
 
-Next, download or clone this repository.
 
 ## Usage
 
@@ -32,6 +31,6 @@ This will check the content of `https://example.com` three times, search for the
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+This project is licensed under the MIT License. 
 
 ---
