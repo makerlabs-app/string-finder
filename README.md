@@ -2,9 +2,9 @@ Of course! Here's an English version of the `README.md` for your tool:
 
 ---
 
-# WebStringFinder
+# Web String Finder
 
-**WebStringFinder** is a Deno tool designed to efficiently search for specific strings within the content of a given URL. It also offers the ability to check the URL multiple times and display specific HTTP response headers.
+**Web String Finder** is a Deno tool designed to efficiently search for specific strings within the content of a given URL. It also offers the ability to check the URL multiple times and display specific HTTP response headers.
 
 ## Installation
 
@@ -38,5 +38,3 @@ This will check the content of `https://example.com` three times, search for the
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
 
 ---
-
-Feel free to customize the README according to your needs and add any additional sections or details as you see fit.
