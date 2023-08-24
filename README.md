@@ -1,8 +1,5 @@
-Of course! Here's an English version of the `README.md` for your tool:
-
----
-
-# Web String Finder
+Web String Finder
+=================
 
 **Web String Finder** is a Deno tool designed to efficiently search for specific strings within the content of a given URL. It also offers the ability to check the URL multiple times and display specific HTTP response headers.
 
@@ -28,7 +25,7 @@ deno run --allow-net main.ts -u <URL> -s <STRING> [-i <ITERATIONS>] [-e <HEADERS
 ### Example
 
 ```bash
-deno run --allow-net main.ts -u https://example.com -s "test" -i 3 -p "age,cache-control"
+deno run --allow-net main.ts -u https://example.com -s "test" -i 3 -e "age,cache-control"
 ```
 
 This will check the content of `https://example.com` three times, search for the string "test", and only display the response headers `age` and `cache-control`.
