@@ -1,0 +1,42 @@
+Of course! Here's an English version of the `README.md` for your tool:
+
+---
+
+# WebStringFinder
+
+**WebStringFinder** is a Deno tool designed to efficiently search for specific strings within the content of a given URL. It also offers the ability to check the URL multiple times and display specific HTTP response headers.
+
+## Installation
+
+Ensure you have [Deno](https://deno.land/) installed on your machine.
+
+Next, download or clone this repository.
+
+## Usage
+
+```bash
+deno run --allow-net main.ts -u <URL> -s <STRING> [-i <ITERATIONS>] [-e <HEADERS>]
+```
+
+### Options
+
+- `-u, --url <url:string>`: The URL from which the content should be fetched.
+- `-s, --string <string:string>`: The string to search for in the content of the provided URL.
+- `-i, --iteration [iteration:number]`: Number of times to check the URL for the string. Defaults to 1.
+- `-e, --headers [headers:string]`: Specific headers to display in the response. Use commas to separate multiple headers.
+
+### Example
+
+```bash
+deno run --allow-net main.ts -u https://example.com -s "test" -i 3 -p "age,cache-control"
+```
+
+This will check the content of `https://example.com` three times, search for the string "test", and only display the response headers `age` and `cache-control`.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
+---
+
+Feel free to customize the README according to your needs and add any additional sections or details as you see fit.

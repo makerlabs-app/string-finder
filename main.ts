@@ -50,7 +50,7 @@ const cli = new Command()
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
-    .option("-p, --headers [headers:string]", "Specific headers to display in the response. Use commas to separate multiple headers.", {
+    .option("-e, --headers [headers:string]", "Specific headers to display in the response. Use commas to separate multiple headers.", {
         collect: true
     })
     .action(searchInWebPage);
