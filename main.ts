@@ -1,5 +1,5 @@
 import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import { red, green, cyan, yellow, blue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
 
 export const searchInWebPage = async ({
   url,
@@ -23,9 +23,9 @@ export const searchInWebPage = async ({
         const body = await response.text();
 
         if (body.includes(string)) {
-            console.log(green(`${blue(string)} String was FOUND ${requestUrl} ${cyan(`(HTTP ${response.status})`)}`));
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + green(' String FOUND'));
         } else {
-            console.log(red(`${blue(string)} String NOT found ${requestUrl} ${cyan(`(HTTP ${response.status})`)}`));
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
         }
 
         console.log(yellow("Headers:"));
