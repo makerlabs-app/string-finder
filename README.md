@@ -32,6 +32,4 @@ This will check the content of `https://example.com` three times, search for the
 
 ## License
 
-This project is licensed under the MIT License. 
-
----
+This project is licensed under the MIT License.

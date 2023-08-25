@@ -6,13 +6,17 @@ const searchInWebPage = async ({
     url: url,
     stringToFind: stringToFind,
     iteration: iteration,
+    param: param,
     requestHeader: requestHeader,
     responseHeader: responseHeader
 }: Parameters) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
-        const uuid = self.crypto.randomUUID();
-        const requestUrl = `${url}&param=${uuid}`;
+        let requestUrl = url + param;
+
+        if (i >= 1) {
+            requestUrl = `${requestUrl}&i=${i}`;
+        }
 
         const headersJson = parseRequestHeadersJsonString(requestHeader);
         const response = await request(requestUrl, 'GET', headersJson);
@@ -77,6 +81,9 @@ const cli = new Command()
     .description("A Deno tool to efficiently find specific strings within the content of a given URL.")
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
     .option("-s, --string-to-find <stringToFind:string>", "The string to find in the content of the provided URL.")
+    .option("-p, --param [param:string]", "Query parameters to pass with the URL", {
+        default: '?param=string-finder'
+    })
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
