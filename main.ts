@@ -1,5 +1,6 @@
 import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {string} from "https://deno.land/x/cliffy@v1.0.0-rc.3/flags/types/string.ts";
 
 export const searchInWebPage = async ({
   url,
@@ -12,7 +13,6 @@ export const searchInWebPage = async ({
     iteration?: number;
     headersInput?: string[];
 }) => {
-    const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
@@ -28,18 +28,35 @@ export const searchInWebPage = async ({
             console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
         }
 
-        console.log(yellow("Headers:"));
-
-        if (headers.length > 0) {
-            headers.forEach(header => {
-                console.log(`  ${cyan(header)}: ${response.headers.get(header) || 'Not Present'}`);
-            });
-        } else {
-            for (const [key, value] of response.headers) {
-                console.log(`  ${cyan(key)}: ${value}`);
-            }
-        }
+        displayHeaders(headersInput, response);
     }
+}
+
+function displayHeaders (headersInput: string[], response: Response): string[]
+{
+    const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
+
+    if (headers.length === 0) {
+        return [];
+    }
+
+    if (headers.length === 1 && headers[0] === 'all') {
+        console.log(yellow("Headers:"));
+        for (const [key, value] of response.headers) {
+            console.log(`  ${cyan(key)}: ${value}`);
+        }
+
+        return headers;
+    }
+
+    if (headers.length > 0) {
+        console.log(yellow("Headers:"));
+        headers.forEach(header => {
+            console.log(`  ${cyan(header)}: ${response.headers.get(header) || 'Not Present'}`);
+        });
+    }
+
+    return headers;
 }
 
 const cli = new Command()
