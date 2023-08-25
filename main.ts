@@ -29,7 +29,7 @@ const searchInWebPage = async ({
     }
 }
 
-export function displayHeaders(headersInput: string[], response: Response): string[] {
+function displayHeaders(headersInput: string[], response: Response): string[] {
     const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
 
     if (headers.length === 0) {
