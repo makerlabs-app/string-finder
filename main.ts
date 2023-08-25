@@ -80,17 +80,17 @@ const cli = new Command()
     .name("WebStringFinder")
     .description("A Deno tool to efficiently find specific strings within the content of a given URL.")
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
-    .option("-s, --string-to-find <stringToFind:string>", "The string to find in the content of the provided URL.")
+    .option("-s, --string-to-find <string-to-find:string>", "The string to find in the content of the provided URL.")
     .option("-p, --param [param:string]", "Query parameters to pass with the URL", {
         default: '?param=string-finder'
     })
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
-    .option("-q, --request-header [requestHeader:string]", "Add headers in your request. Provide them as a JSON string.", {
+    .option("-q, --request-header [request-header:string]", "Add headers in your request. Provide them as a JSON string.", {
         default: '{"String-Finder":"Default"}'
     })
-    .option("-a, --response-header [responseHeader:string]", "Specific response header to display. Use commas to separate multiple headers.", {
+    .option("-a, --response-header [response-header:string]", "Specific response header to display. Use commas to separate multiple headers.", {
         collect: true
     })
     .action(searchInWebPage);
