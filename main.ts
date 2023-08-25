@@ -1,56 +1,89 @@
-import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
+import {bgBlue, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {Parameters, HttpHeaders} from "./interfaces.ts";
 
-export const searchInWebPage = async ({
-  url,
-  string,
-  iteration,
-  headers: headersInput
-}: {
-    url: string;
-    string: string;
-    iteration?: number;
-    headersInput?: string[];
-}) => {
-    const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
+const searchInWebPage = async ({
+    url: url,
+    stringToFind: stringToFind,
+    iteration: iteration,
+    requestHeader: requestHeader,
+    responseHeader: responseHeader
+}: Parameters) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
-        const requestUrl = `${url}?param=${uuid}`;
+        const requestUrl = `${url}&param=${uuid}`;
 
-        // Fetch the content from the given URL
-        const response = await fetch(requestUrl);
+        const headersJson = parseRequestHeadersJsonString(requestHeader);
+        const response = await request(requestUrl, 'GET', headersJson);
         const body = await response.text();
 
-        if (body.includes(string)) {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + green(' String FOUND'));
+        if (body.includes(stringToFind)) {
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + green(' String FOUND'));
         } else {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + red(' String NOT FOUND'));
         }
 
-        console.log(yellow("Headers:"));
-
-        if (headers.length > 0) {
-            headers.forEach(header => {
-                console.log(`  ${cyan(header)}: ${response.headers.get(header) || 'Not Present'}`);
-            });
-        } else {
-            for (const [key, value] of response.headers) {
-                console.log(`  ${cyan(key)}: ${value}`);
-            }
+        if (responseHeader !== undefined) {
+            displayResponseHeaders(responseHeader, response);
         }
     }
+}
+
+async function request(url : string, method : string, headers: HttpHeaders) : Promise<Response> {
+    return await fetch(url, {
+        method: method,
+        headers: headers
+    });
+}
+
+function parseRequestHeadersJsonString (headersJsonString: string) {
+    try {
+        return JSON.parse(headersJsonString);
+    } catch (error) {
+        console.log(headersJsonString);
+        throw new Error("Failed to parse the provided headers JSON:", error.message);
+    }
+}
+
+function displayResponseHeaders(headersInput: string[], response: Response): string[] {
+    const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
+
+    if (headers.length === 0) {
+        return [];
+    }
+
+    if (headers.length === 1 && headers[0] === 'all') {
+        console.log(yellow("Headers:"));
+        for (const [key, value] of response.headers) {
+            console.log(`  ${cyan(key)}: ${value}`);
+        }
+
+        return headers;
+    }
+
+    if (headers.length > 0) {
+        console.log(yellow("Headers:"));
+        headers.forEach(header => {
+            console.log(`  ${cyan(header)}: ${response.headers.get(header) || 'Not Present'}`);
+        });
+    }
+
+    return headers;
 }
 
 const cli = new Command()
     .name("WebStringFinder")
     .description("A Deno tool to efficiently find specific strings within the content of a given URL.")
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
-    .option("-s, --string <string:string>", "The string to find in the content of the provided URL.")
+    .option("-s, --string-to-find <stringToFind:string>", "The string to find in the content of the provided URL.")
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
-    .option("-e, --headers [headers:string]", "Specific headers to display in the response. Use commas to separate multiple headers.", {
+    .option("-q, --request-header [requestHeader:string]", "Add headers in your request. Provide them as a JSON string.", {
+        default: '{"String-Finder":"Default"}'
+    })
+    .option("-a, --response-header [responseHeader:string]", "Specific response header to display. Use commas to separate multiple headers.", {
         collect: true
     })
     .action(searchInWebPage);
