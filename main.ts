@@ -24,12 +24,12 @@ const searchInWebPage = async ({
         }
 
         if (headers !== undefined) {
-            displayHeaders(headers, response);
+            displayResponseHeaders(headers, response);
         }
     }
 }
 
-function displayHeaders(headersInput: string[], response: Response): string[] {
+function displayResponseHeaders(headersInput: string[], response: Response): string[] {
     const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
 
     if (headers.length === 0) {
