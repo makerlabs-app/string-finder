@@ -6,15 +6,14 @@ const searchInWebPage = async ({
     url: url,
     stringToFind: stringToFind,
     iteration: iteration,
-    headers: headers
+    responseHeader: responseHeader
 }: Parameters) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
         const requestUrl = `${url}?param=${uuid}`;
 
-        // Fetch the content from the given URL
-        const response = await fetch(requestUrl);
+        const response = await request(requestUrl);
         const body = await response.text();
 
         if (body.includes(stringToFind)) {
@@ -23,10 +22,14 @@ const searchInWebPage = async ({
             console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + red(' String NOT FOUND'));
         }
 
-        if (headers !== undefined) {
-            displayResponseHeaders(headers, response);
+        if (responseHeader !== undefined) {
+            displayResponseHeaders(responseHeader, response);
         }
     }
+}
+
+async function request(url : string) : Promise<Response> {
+    return await fetch(url);
 }
 
 function displayResponseHeaders(headersInput: string[], response: Response): string[] {
@@ -63,7 +66,7 @@ const cli = new Command()
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
-    .option("-e, --headers [headers:string]", "Specific headers to display in the response. Use commas to separate multiple headers.", {
+    .option("-a, --response-header [response-header:string]", "Specific response header to display. Use commas to separate multiple headers.", {
         collect: true
     })
     .action(searchInWebPage);
