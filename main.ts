@@ -1,13 +1,13 @@
-import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
+import {bgBlue, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
 import {Parameters} from "./interfaces.ts";
 
 export const searchInWebPage = async ({
-  url,
-  string,
-  iteration,
-  headers: headers
-}: Parameters ) => {
+                                          url,
+                                          string,
+                                          iteration,
+                                          headers: headers
+                                      }: Parameters) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
@@ -29,8 +29,7 @@ export const searchInWebPage = async ({
     }
 }
 
-function displayHeaders (headersInput: string[], response: Response): string[]
-{
+function displayHeaders(headersInput: string[], response: Response): string[] {
     const headers = headersInput?.flatMap(h => h.split(',').map(item => item.trim())) || [];
 
     if (headers.length === 0) {
