@@ -1,12 +1,6 @@
 import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
-
-interface Parameters {
-    url: string;
-    string: string;
-    iteration?: number | undefined;
-    headers?: string[] | undefined;
-}
+import {Parameters} from "./interfaces.ts";
 
 export const searchInWebPage = async ({
   url,
