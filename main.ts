@@ -1,17 +1,19 @@
 import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 import { red, green, cyan, yellow, bgBlue } from "https://deno.land/std@0.199.0/fmt/colors.ts";
 
+interface Headers {
+    url: string;
+    string: string;
+    iteration?: number | undefined;
+    headers?: string[] | undefined;
+}
+
 export const searchInWebPage = async ({
   url,
   string,
   iteration,
   headers: headers
-}: {
-    url: string;
-    string: string;
-    iteration?: number;
-    headers?: string[];
-}) => {
+}: Headers ) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
@@ -27,7 +29,9 @@ export const searchInWebPage = async ({
             console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
         }
 
-        displayHeaders(headers, response);
+        if (headers !== undefined) {
+            displayHeaders(headers, response);
+        }
     }
 }
 
