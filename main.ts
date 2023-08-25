@@ -4,7 +4,7 @@ import {Parameters} from "./interfaces.ts";
 
 export const searchInWebPage = async ({
                                           url,
-                                          string,
+                                          stringToFind,
                                           iteration,
                                           headers: headers
                                       }: Parameters) => {
@@ -17,10 +17,10 @@ export const searchInWebPage = async ({
         const response = await fetch(requestUrl);
         const body = await response.text();
 
-        if (body.includes(string)) {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + green(' String FOUND'));
+        if (body.includes(stringToFind)) {
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + green(' String FOUND'));
         } else {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
+            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + red(' String NOT FOUND'));
         }
 
         if (headers !== undefined) {
@@ -59,7 +59,7 @@ const cli = new Command()
     .name("WebStringFinder")
     .description("A Deno tool to efficiently find specific strings within the content of a given URL.")
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
-    .option("-s, --string <string:string>", "The string to find in the content of the provided URL.")
+    .option("-s, --string <stringToFind:string>", "The string to find in the content of the provided URL.")
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
