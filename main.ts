@@ -5,12 +5,12 @@ export const searchInWebPage = async ({
   url,
   string,
   iteration,
-  headers: headersInput
+  headers: headers
 }: {
     url: string;
     string: string;
     iteration?: number;
-    headersInput?: string[];
+    headers?: string[];
 }) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
@@ -27,7 +27,7 @@ export const searchInWebPage = async ({
             console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(string) + red(' String NOT FOUND'));
         }
 
-        displayHeaders(headersInput, response);
+        displayHeaders(headers, response);
     }
 }
 
