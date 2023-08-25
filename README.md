@@ -19,7 +19,7 @@ deno run --allow-net main.ts -u <URL> -s <STRING> [-i <ITERATIONS>] [-a <HEADERS
 - `-u, --url <url:string>`: The URL from which the content should be fetched.
 - `-s, --string <string:string>`: The string to search for in the content of the provided URL.
 - `-i, --iteration [iteration:number]`: Number of times to check the URL for the string. Defaults to 1.
-- `-a, --headers [headers:string]`: Specific headers to display in the response. Use commas to separate multiple headers.
+- `-a, --response-header [response-header:string]`: Specific headers to display in the response. Use commas to separate multiple headers.
 
 ### Example
 
