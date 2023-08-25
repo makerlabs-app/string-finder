@@ -1,19 +1,21 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 import {bgBlue, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
-import {Parameters} from "./interfaces.ts";
+import {Parameters, HttpHeaders} from "./interfaces.ts";
 
 const searchInWebPage = async ({
     url: url,
     stringToFind: stringToFind,
     iteration: iteration,
+    requestHeader: requestHeader,
     responseHeader: responseHeader
 }: Parameters) => {
 
     for (let i = 0; i < (iteration || 1); i++) {
         const uuid = self.crypto.randomUUID();
-        const requestUrl = `${url}?param=${uuid}`;
+        const requestUrl = `${url}&param=${uuid}`;
 
-        const response = await request(requestUrl);
+        const headersJson = parseRequestHeadersJsonString(requestHeader);
+        const response = await request(requestUrl, 'GET', headersJson);
         const body = await response.text();
 
         if (body.includes(stringToFind)) {
@@ -28,8 +30,20 @@ const searchInWebPage = async ({
     }
 }
 
-async function request(url : string) : Promise<Response> {
-    return await fetch(url);
+async function request(url : string, method : string, headers: HttpHeaders) : Promise<Response> {
+    return await fetch(url, {
+        method: method,
+        headers: headers
+    });
+}
+
+function parseRequestHeadersJsonString (headersJsonString: string) {
+    try {
+        return JSON.parse(headersJsonString);
+    } catch (error) {
+        console.log(headersJsonString);
+        throw new Error("Failed to parse the provided headers JSON:", error.message);
+    }
 }
 
 function displayResponseHeaders(headersInput: string[], response: Response): string[] {
@@ -62,11 +76,14 @@ const cli = new Command()
     .name("WebStringFinder")
     .description("A Deno tool to efficiently find specific strings within the content of a given URL.")
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
-    .option("-s, --stringToFind <stringToFind:string>", "The string to find in the content of the provided URL.")
+    .option("-s, --string-to-find <stringToFind:string>", "The string to find in the content of the provided URL.")
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
     })
-    .option("-a, --response-header [response-header:string]", "Specific response header to display. Use commas to separate multiple headers.", {
+    .option("-q, --request-header [requestHeader:string]", "Add headers in your request. Provide them as a JSON string.", {
+        default: '{"String-Finder":"Default"}'
+    })
+    .option("-a, --response-header [responseHeader:string]", "Specific response header to display. Use commas to separate multiple headers.", {
         collect: true
     })
     .action(searchInWebPage);

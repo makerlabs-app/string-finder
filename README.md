@@ -11,14 +11,15 @@ Ensure you have [Deno](https://deno.land/) installed on your machine.
 ## Usage
 
 ```bash
-deno run --allow-net main.ts -u <URL> -s <STRING> [-i <ITERATIONS>] [-a <HEADERS>]
+deno run --allow-net main.ts -u <URL> -s <STRING-TO-FIND> [-i <ITERATIONS>] [-q <REQUEST-HEADERS>] [-a <RESPONSE-HEADERS>]
 ```
 
 ### Options
 
 - `-u, --url <url:string>`: The URL from which the content should be fetched.
-- `-s, --string <string:string>`: The string to search for in the content of the provided URL.
+- `-s, --string-to-find <stringToFind:string>`: The string to search for in the content of the provided URL.
 - `-i, --iteration [iteration:number]`: Number of times to check the URL for the string. Defaults to 1.
+- `-q, --request-header [request-header:string]`: Add headers to your http request. Use commas to separate multiple headers.
 - `-a, --response-header [response-header:string]`: Specific headers to display in the response. Use commas to separate multiple headers.
 
 ### Example
