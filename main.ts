@@ -1,5 +1,5 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import {bgBlue, bgGreen, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {bgBlue, bgGreen, bgBrightYellow, bgBrightCyan, bgRed, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
 import {Parameters, HttpHeaders} from "./interfaces.ts";
 
 const searchInWebPage = async ({
@@ -21,17 +21,40 @@ const searchInWebPage = async ({
         const headersJson = parseRequestHeadersJsonString(requestHeader);
         const response = await request(requestUrl, 'GET', headersJson);
         const body = await response.text();
+        const displayCode = chooseColorForHttpCodeResponse(response.status);
 
         if (body.includes(stringToFind)) {
-            console.log(bgGreen(`(HTTP ${response.status})`) + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + green(' String FOUND'));
+            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + green(' String FOUND'));
         } else {
-            console.log(bgGreen(`(HTTP ${response.status})`) + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + red(' String NOT FOUND'));
+            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + red(' String NOT FOUND'));
         }
 
         if (responseHeader !== undefined) {
             displayResponseHeaders(responseHeader, response);
         }
     }
+}
+
+function chooseColorForHttpCodeResponse(codeResponse : number) {
+    const codeString = codeResponse.toString();
+    const code = codeString[0];
+    let displayCode = '';
+
+    switch (code) {
+        case '2':
+            displayCode = bgGreen(`(HTTP ${codeResponse})`)
+            break;
+        case '4':
+            displayCode = bgBrightYellow(`(HTTP ${codeResponse})`)
+            break;
+        case '5':
+            displayCode = bgRed(`(HTTP ${codeResponse})`)
+            break;
+        default:
+            displayCode = bgBrightCyan(`(HTTP ${codeResponse})`)
+    }
+
+    return displayCode;
 }
 
 async function request(url : string, method : string, headers: HttpHeaders) : Promise<Response> {
