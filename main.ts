@@ -42,16 +42,16 @@ function chooseColorForHttpCodeResponse(codeResponse : number) {
 
     switch (code) {
         case '2':
-            displayCode = bgGreen(`(HTTP ${codeResponse})`)
+            displayCode = bgGreen(`HTTP ${codeResponse}`)
             break;
         case '4':
-            displayCode = bgBrightYellow(`(HTTP ${codeResponse})`)
+            displayCode = bgBrightYellow(`HTTP ${codeResponse}`)
             break;
         case '5':
-            displayCode = bgRed(`(HTTP ${codeResponse})`)
+            displayCode = bgRed(`HTTP ${codeResponse}`)
             break;
         default:
-            displayCode = bgBrightCyan(`(HTTP ${codeResponse})`)
+            displayCode = bgBrightCyan(`HTTP ${codeResponse}`)
     }
 
     return displayCode;
