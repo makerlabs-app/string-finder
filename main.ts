@@ -1,5 +1,5 @@
 import {Command} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import {bgBlue, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
+import {bgBlue, bgGreen, cyan, green, red, yellow} from "https://deno.land/std@0.199.0/fmt/colors.ts";
 import {Parameters, HttpHeaders} from "./interfaces.ts";
 
 const searchInWebPage = async ({
@@ -23,9 +23,9 @@ const searchInWebPage = async ({
         const body = await response.text();
 
         if (body.includes(stringToFind)) {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + green(' String FOUND'));
+            console.log(bgGreen(`(HTTP ${response.status})`) + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + green(' String FOUND'));
         } else {
-            console.log(requestUrl + ' ' + cyan(`(HTTP ${response.status}) `) + bgBlue(stringToFind) + red(' String NOT FOUND'));
+            console.log(bgGreen(`(HTTP ${response.status})`) + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + red(' String NOT FOUND'));
         }
 
         if (responseHeader !== undefined) {
@@ -82,7 +82,7 @@ const cli = new Command()
     .option("-u, --url <url:string>", "The URL from which the content should be fetched.")
     .option("-s, --string-to-find <string-to-find:string>", "The string to find in the content of the provided URL.")
     .option("-p, --param [param:string]", "Query parameters to pass with the URL", {
-        default: '?param=string-finder'
+        default: '?param=finder'
     })
     .option("-i, --iteration [iteration:number]", "Number of times to check the URL for the string. Defaults to 1.", {
         default: 1
