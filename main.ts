@@ -24,9 +24,9 @@ const searchInWebPage = async ({
         const displayCode = chooseColorForHttpCodeResponse(response.status);
 
         if (body.includes(stringToFind)) {
-            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + green(' String FOUND'));
+            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(` ${stringToFind} `) + green(' STRING FOUND'));
         } else {
-            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(stringToFind) + red(' String NOT FOUND'));
+            console.log(displayCode + ' ' + requestUrl + ' ' + bgBlue(` ${stringToFind} `) + red(' STRING NOT FOUND'));
         }
 
         if (responseHeader !== undefined) {
